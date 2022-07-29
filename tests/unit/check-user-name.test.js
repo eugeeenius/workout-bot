@@ -1,20 +1,20 @@
-const checkUsername = require('../../src/utils/checkUsername');
+const checkUserName = require('../../src/utils/check-user-name');
 require('dotenv').config();
 
-describe('checkUsername', () => {
+describe('checkUserName', () => {
   test('username is not string', () => {
-    expect(checkUsername(null)).toBe(false);
+    expect(checkUserName(null)).toBe(false);
   });
   test('allowedUserNamesStr is not string', () => {
     const USERNAME = 'user';
-    expect(checkUsername(USERNAME, null)).toBe(false);
+    expect(checkUserName(USERNAME, null)).toBe(false);
   });
   test('allowed username', () => {
     const USERNAME = process.env.ALLOWED_USERNAMES.split(',')[0];
-    expect(checkUsername(USERNAME)).toBe(true);
+    expect(checkUserName(USERNAME)).toBe(true);
   });
   test('forbidden username', () => {
     const USERNAME = 'forbidden_user';
-    expect(checkUsername(USERNAME)).toBe(false);
+    expect(checkUserName(USERNAME)).toBe(false);
   });
 });
