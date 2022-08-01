@@ -1,5 +1,5 @@
 module.exports = {
-  text: 'Выберите группу мышц',
+  text: 'Выберите группу',
   form: {
     reply_markup: {
       inline_keyboard: [

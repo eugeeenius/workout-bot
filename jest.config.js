@@ -1,3 +1,6 @@
 module.exports = {
-  globalSetup: './jest-setup.js'
+  testEnvironment: 'node',
+  setupFiles: ['dotenv/config'],
+  setupFilesAfterEnv: ['./src/config/jest/global-setup.js'],
+  clearMocks: true
 };

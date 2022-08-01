@@ -1,5 +1,5 @@
-const muscleGroupChoice = require('./muscle-group-choice')
+const MUSCLE_GROUP_CHOICE = require('./muscle-group-choice')
 
 module.exports = {
-  muscleGroupChoice
+  MUSCLE_GROUP_CHOICE
 };

@@ -5,7 +5,7 @@ const { DataTypes } = require('sequelize');
 
 const Workout = sequelize.define('workout', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  chatId: { type: DataTypes.INTEGER },
+  chatId: { type: DataTypes.INTEGER, foreignKey: true },
   type: { type: DataTypes.ENUM(Object.values(WorkoutTypes)) },
   muscleGroup: { type: DataTypes.ENUM(Object.values(MuscleGroup)) },
   approaches: { type: DataTypes.ARRAY(DataTypes.INTEGER) }

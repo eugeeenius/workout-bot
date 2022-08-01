@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "test": "NODE_ENV=test jest --watchAll tests"
+    "dev": "NODE_ENV=development nodemon index.js",
+    "test": "NODE_ENV=test jest tests",
+    "watch": "NODE_ENV=test jest --watchAll tests"
   },
   "keywords": [],
   "author": "",

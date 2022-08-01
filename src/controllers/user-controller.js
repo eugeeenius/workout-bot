@@ -1,13 +1,10 @@
-const User = require('../models/user')
+const UserService = require('../services/user-service');
 
 class UserController {
   async register(chatId) {
-    const candidate = await User.findByPk(chatId);
-    if (!candidate) {
-      const user = await User.create({ chatId });
-      await user.save();
-    }
+    if (typeof chatId !== 'number') return;
+    await UserService.createUser(chatId);
   }
 }
 
-module.exports = UserController;
+module.exports = new UserController();
