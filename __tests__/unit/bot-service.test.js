@@ -1,5 +1,4 @@
 const BotService = require('../../src/services/bot-service');
-const WorkoutBot = require('../../src/bot');
 
 describe('BotService', () => {
   describe('checkUserName', () => {

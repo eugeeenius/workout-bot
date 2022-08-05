@@ -1,38 +1,68 @@
 const TelegramBot = require('node-telegram-bot-api');
 const UserService = require('./services/user-service');
+const WorkoutService = require('./services/workout-service');
+const SET_MY_COMMANDS_PAYLOADS = require('./enum/set-my-command-payloads');
 const COMMANDS = require('./enum/commands');
 const MESSAGES = require('./messages');
-const BOT_EVENTS = require('./enum/bot-events');
+const EVENTS = require('./enum/bot-events');
 
 class WorkoutBot extends TelegramBot {
   constructor(token, options) {
     super(token, options);
-    this.init();
   }
 
   async init() {
+    await this.startPolling({ restart: true });
+
     await this.setMyCommands([
-      { command: COMMANDS.START_WORKOUT, description: 'Начать тренировку' }
+      SET_MY_COMMANDS_PAYLOADS[COMMANDS.START]
     ]);
 
-    this.on('message', async (msg) => {
+    this.on(EVENTS.MESSAGE, async (msg) => {
+      console.log(msg);
+      if (!msg) {
+        await this.sendMessage(MESSAGES.ERROR);
+        return;
+      }
+
       switch (msg.text) {
+        case COMMANDS.START:
+          await this.onStart(msg);
+          break;
         case COMMANDS.START_WORKOUT:
-          await this.onStartWorkout();
+          await this.onStartWorkout(msg);
           break;
       }
     });
 
-    this.emit(BOT_EVENTS.READY);
+    this.emit(EVENTS.READY);
+  }
+
+  async disconnect() {
+    await this.stopPolling({ cancel: true });
+  }
+
+  async onStart(msg) {
+    const chatId = msg.chat.id
+    const candidate = await UserService.getUser(chatId);
+    if (!candidate) {
+      const commands = await this.getMyCommands();
+      await UserService.createUser(chatId);
+      await this.setMyCommands([
+        ...commands,
+        SET_MY_COMMANDS_PAYLOADS[COMMANDS.START_WORKOUT]
+      ]);
+      await this.sendMessage(chatId, MESSAGES.START_WORKOUT);
+    }
   }
 
   async onStartWorkout(msg) {
     const chatId = msg.chat.id
     const user = await UserService.getUser(chatId);
-    if (!user) {
-      await this.sendMessage(chatId, MESSAGES.MUSCLE_GROUP_CHOICE);
-      return;
-    }
+
+    if (!user) return;
+
+    await WorkoutService.createWorkout(chatId);
   }
 
   async sendMessage(chatId, message) {

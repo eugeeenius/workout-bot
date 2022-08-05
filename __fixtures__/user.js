@@ -1,4 +1,5 @@
 module.exports = () => ({
   chatId: 1211313,
-  workoutTypesOrder: ['max', 'short', 'delays']
+  workoutTypesOrder: ['max', 'short', 'delays'],
+  restDays: 2
 });

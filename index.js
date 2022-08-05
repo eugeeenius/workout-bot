@@ -6,7 +6,9 @@ const start = async () => {
   try {
     await sequelize.authenticate();
     await sequelize.sync({ force: true });
-    new WorkoutBot(process.env.API_TOKEN, { polling: true });
+
+    const bot = new WorkoutBot(process.env.API_TOKEN);
+    await bot.init();
   } catch(e) {
     console.error(e);
   }

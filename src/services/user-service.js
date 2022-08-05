@@ -2,11 +2,7 @@ const UserModel = require('../models/user');
 
 class UserService {
   async createUser(chatId) {
-    try {
-      await UserModel.findOrCreate({ where: { chatId } });
-    } catch(e) {
-      console.log(e);
-    }
+    return UserModel.findOrCreate({ where: { chatId } });
   }
 
   async getUser(chatId) {
