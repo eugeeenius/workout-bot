@@ -38,7 +38,7 @@ describe('WorkoutService', () => {
       expect(createModelSpy).toHaveBeenCalledWith({
         chatId: CHAT_ID,
         muscleGroup: MUSCLE_GROUP.BACK,
-        workoutType: WORKOUT_TYPES.SHORT_PAUSES
+        type: WORKOUT_TYPES.SHORT_PAUSES
       });
     });
 
@@ -50,8 +50,15 @@ describe('WorkoutService', () => {
       expect(createModelSpy).toHaveBeenCalledWith({
         chatId: CHAT_ID,
         muscleGroup: MUSCLE_GROUP.CHEST,
-        workoutType: WORKOUT_TYPES.MAX_AMOUNT
+        type: WORKOUT_TYPES.MAX_AMOUNT
       });
+    });
+
+    test('Has unfinished workout', async () => {
+      WORKOUT.done = false;
+      WorkoutService.getLastWorkout = jest.fn().mockResolvedValue(WORKOUT);
+
+      expect(createModelSpy).not.toHaveBeenCalled();
     });
   });
 

@@ -1,12 +1,9 @@
 const WorkoutBot = require('../../src/bot');
-const TelegramBot = require('node-telegram-bot-api');
-const UserService = require('../../src/services/user-service');
-const WorkoutService = require('../../src/services/workout-service');
 const getMessageFixture = require('../../__fixtures__/message');
 const getUserFixture = require('../../__fixtures__/user');
 const MESSAGES = require('../../src/messages');
 const COMMANDS = require('../../src/enum/commands');
-const SET_MY_COMMANDS_PAYLOADS = require('../../src/enum/set-my-command-payloads');
+const SET_MY_COMMANDS_PAYLOADS = require('../../src/enum/set-my-commands-payloads');
 const EVENTS = require('../../src/enum/bot-events');
 const { startBot, stopBot } = require('../start-bot');
 
@@ -35,7 +32,7 @@ describe('WorkoutBot', () => {
     const CHAT_ID = 123;
     let MESSAGE, USER;
 
-    jest.setTimeout(20000);
+    jest.setTimeout(30000);
 
     beforeEach(() => {
       USER = getUserFixture();
@@ -48,12 +45,18 @@ describe('WorkoutBot', () => {
       expect.hasAssertions();
     });
 
+    beforeAll(async () => {
+      bot = await startBot();
+    });
+
     test('No message object', (done) => {
       workoutBotPrototype.sendMessage = jest.fn();
 
       bot.emit(EVENTS.MESSAGE, null);
+      bot.emit(EVENTS.CALLBACK_QUERY, null);
 
       setTimeout(() => {
+        expect(workoutBotPrototype.sendMessage).toHaveBeenCalledTimes(2);
         expect(workoutBotPrototype.sendMessage).toHaveBeenCalledWith(MESSAGES.ERROR);
         done();
       }, 1000)
@@ -61,24 +64,29 @@ describe('WorkoutBot', () => {
 
     test('On /start', (done) => {
       MESSAGE.text = COMMANDS.START;
+      MESSAGE.data = COMMANDS.START;
       workoutBotPrototype.onStart = jest.fn();
 
       bot.emit(EVENTS.MESSAGE, MESSAGE);
+      bot.emit(EVENTS.CALLBACK_QUERY, { message: MESSAGE, data: COMMANDS.START });
 
       setTimeout(() => {
-        expect(workoutBotPrototype.onStart).toHaveBeenCalled();
+        expect(workoutBotPrototype.onStart).toHaveBeenCalledTimes(2);
         done();
       }, 1000)
     })
 
     test('On /start_workout', (done) => {
       MESSAGE.text = COMMANDS.START_WORKOUT;
+      MESSAGE.data = COMMANDS.START_WORKOUT;
       workoutBotPrototype.onStartWorkout = jest.fn();
 
       bot.emit(EVENTS.MESSAGE, MESSAGE);
+      bot.emit(EVENTS.CALLBACK_QUERY, { message: MESSAGE, data: COMMANDS.START_WORKOUT });
 
       setTimeout(() => {
-        expect(workoutBotPrototype.onStartWorkout).toHaveBeenCalled();
+        expect(workoutBotPrototype.onStartWorkout).toHaveBeenCalledWith(CHAT_ID);
+        expect(workoutBotPrototype.onStartWorkout).toHaveBeenCalledTimes(2);
         done();
       }, 1000)
     })

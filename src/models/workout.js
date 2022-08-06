@@ -8,7 +8,8 @@ const Workout = sequelize.define('workout', {
   chatId: { type: DataTypes.INTEGER, foreignKey: true },
   type: { type: DataTypes.ENUM(Object.values(WORKOUT_TYPES)), allowNull: false },
   muscleGroup: { type: DataTypes.ENUM(Object.values(MUSCLE_GROUP)), allowNull: false },
-  approaches: { type: DataTypes.ARRAY(DataTypes.INTEGER), defaultValue: [] }
+  approaches: { type: DataTypes.ARRAY(DataTypes.INTEGER), defaultValue: [] },
+  done: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false }
 });
 
 module.exports = Workout;

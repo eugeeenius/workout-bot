@@ -1,4 +1,5 @@
 module.exports = Object.freeze({
+  READY: 'ready',
   MESSAGE: 'message',
-  READY: 'ready'
+  CALLBACK_QUERY: 'callback_query'
 });

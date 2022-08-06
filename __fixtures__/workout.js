@@ -6,5 +6,6 @@ module.exports = () => ({
   chatId: 228,
   type: WORKOUT_TYPES.MAX_AMOUNT,
   muscleGroup: MUSCLE_GROUPS.CHEST,
-  approaches: [14, 10, 8, 6]
+  approaches: [14, 10, 8, 6],
+  done: true
 });

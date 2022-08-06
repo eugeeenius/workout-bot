@@ -5,15 +5,19 @@ const MUSCLE_GROUPS = require('../enum/muscle-group');
 class WorkoutService {
   async createWorkout(chatId) {
     const lastWorkout = await this.getLastWorkout(chatId);
+    if (lastWorkout?.done === false) {
+      return;
+    }
+
     const workoutType = this.getWorkoutType(lastWorkout?.type);
     const muscleGroup = lastWorkout?.muscleGroup === MUSCLE_GROUPS.CHEST
       ? MUSCLE_GROUPS.BACK
       : MUSCLE_GROUPS.CHEST;
 
-    await WorkoutModel.create({
+    return await WorkoutModel.create({
       chatId,
       muscleGroup,
-      workoutType
+      type: workoutType
     });
   }
 
